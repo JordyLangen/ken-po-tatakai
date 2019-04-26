@@ -1,6 +1,4 @@
-﻿using Kenpotatakai.Core.User;
-
-namespace Kenpotatakai.Core.Users
+﻿namespace Kenpotatakai.Core.Users
 {
     public class User
     {
