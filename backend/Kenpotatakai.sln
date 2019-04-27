@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kenpotatakai.Functions", "Kenpotatakai.Functions\Kenpotatakai.Functions.csproj", "{2297FD70-31D1-4541-93A7-176C7D021E85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kenpotatakai", "Kenpotatakai\Kenpotatakai.csproj", "{2297FD70-31D1-4541-93A7-176C7D021E85}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kenpotatakai.Client", "Kenpotatakai.Client\Kenpotatakai.Client.csproj", "{7E3546F6-5B0D-48A2-A763-A05887CBAB36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kenpotatakai.Core", "Kenpotatakai.Core\Kenpotatakai.Core.csproj", "{BD135308-4442-4219-BE09-C61B05949F88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kenpotatakai.Core", "Kenpotatakai.Core\Kenpotatakai.Core.csproj", "{BD135308-4442-4219-BE09-C61B05949F88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
