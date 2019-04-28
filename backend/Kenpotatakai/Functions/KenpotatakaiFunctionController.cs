@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Net;
+﻿using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Security.Claims;
 using System.Security.Principal;
-using System.Threading.Tasks;
 using MediatR;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Kenpotatakai.Functions
 {
@@ -41,24 +33,10 @@ namespace Kenpotatakai.Functions
             return claimsPrincipal?.Identity != null && claimsPrincipal.Identity.IsAuthenticated;
         }
 
-        protected async Task<T> GetRequestBody<T>(HttpRequestMessage request) where T : class, new()
-        {
-            try
-            {
-                var body = await request.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<T>(body);
-            }
-            catch (Exception)
-            {
-                request.CreateResponse(HttpStatusCode.BadRequest);
-                return null;
-            }
-        }
-
         protected string GetStableSecurityId(HttpRequestMessage request, ClaimsPrincipal claimsPrincipal)
         {
             var claims = IsRunningLocally(claimsPrincipal)
-                ? GetEasyAuthClaims(request)
+                ? request.GetEasyAuthClaims()
                 : claimsPrincipal.Claims.ToList();
 
             return claims.SingleOrDefault(claim => claim.Type == ClaimTypeStableSecurityId)?.Value;
@@ -67,7 +45,7 @@ namespace Kenpotatakai.Functions
         protected string GetIdentityProvider(HttpRequestMessage request, ClaimsPrincipal claimsPrincipal)
         {
             var claims = IsRunningLocally(claimsPrincipal)
-                ? GetEasyAuthClaims(request)
+                ? request.GetEasyAuthClaims()
                 : claimsPrincipal.Claims.ToList();
 
             return claims.SingleOrDefault(claim => claim.Type == ClaimTypeIdentityProvider)?.Value ??
@@ -82,24 +60,9 @@ namespace Kenpotatakai.Functions
                        .Value.ToLowerInvariant() == "admin";
         }
 
-        private static IList<Claim> GetEasyAuthClaims(HttpRequestMessage request)
-        {
-            var token = request.Headers.GetValues("X-ZUMO-AUTH").SingleOrDefault();
-            var handler = new JwtSecurityTokenHandler();
-            var decodedToken = handler.ReadToken(token) as JwtSecurityToken;
-            return decodedToken?.Claims.ToList() ?? new List<Claim>();
-        }
-
         protected MediaTypeFormatter JsonMediaTypeFormatter()
         {
-            return new JsonMediaTypeFormatter
-            {
-                Indent = true,
-                SerializerSettings = new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                }
-            };
+            return HttpRequestMessageExtensions.JsonMediaTypeFormatter();
         }
     }
 }
