@@ -60,7 +60,6 @@ namespace Kenpotatakai.Core.Users.UseCases
             {
                 DisplayName = GetClaim(authMeResponse, ClaimTypes.Name),
                 NamedId = authMeResponse.UserId,
-                UserId = GetClaim(authMeResponse, ClaimTypes.NameIdentifier),
                 ProviderName = authMeResponse.ProviderName,
                 AvatarUrl = avatarUrl
             };
@@ -70,7 +69,7 @@ namespace Kenpotatakai.Core.Users.UseCases
         {
             return new CreateProviderBasedProfileResponse
             {
-                UserId = authMeResponse.UserId,
+                NamedId = authMeResponse.UserId,
                 ProviderName = authMeResponse.ProviderName
             };
         }

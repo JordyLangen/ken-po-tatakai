@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Kenpotatakai.Core.Users.Messages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -22,7 +23,9 @@ namespace Kenpotatakai.Client
 
         private static readonly Dictionary<string, Action> Requests = new Dictionary<string, Action>
         {
-            {nameof(GetProviderBasedProfile), GetProviderBasedProfile }
+            {nameof(GetProviderBasedProfile), GetProviderBasedProfile},
+            {nameof(GetClaims), GetClaims},
+            {nameof(RegisterUser), RegisterUser}
         };
 
         static void Main(string[] args)
@@ -65,6 +68,39 @@ namespace Kenpotatakai.Client
             var response = _restClient.Execute(request);
 
             Console.WriteLine("GetProviderBasedProfile result:");
+            Console.WriteLine(response.StatusCode);
+            Console.WriteLine(JObject.Parse(response.Content).ToString(Formatting.Indented));
+            Console.WriteLine();
+        }
+
+        static void GetClaims()
+        {
+            Console.WriteLine("Executing GetClaims...");
+
+            var request = new RestRequest("/api/users/claims", Method.GET);
+            var response = _restClient.Execute(request);
+
+            Console.WriteLine("GetClaims result:");
+            Console.WriteLine(response.StatusCode);
+            Console.WriteLine(JArray.Parse(response.Content).ToString(Formatting.Indented));
+            Console.WriteLine();
+        }
+
+        static void RegisterUser()
+        {
+            Console.WriteLine("Executing RegisterUser...");
+
+            var request = new RestRequest("/api/users", Method.POST);
+            request.AddJsonBody(new RegisterUserRequest
+            {
+                DisplayName = "Jordy Langen",
+                EmailAddress = "jordylangen@gmail.com",
+                AvatarUrl = "https://pbs.twimg.com/profile_images/949275818278178816/1B4Ia7bw_400x400.jpg"
+            });
+
+            var response = _restClient.Execute(request);
+
+            Console.WriteLine("RegisterUser result:");
             Console.WriteLine(response.StatusCode);
             Console.WriteLine(JObject.Parse(response.Content).ToString(Formatting.Indented));
             Console.WriteLine();
