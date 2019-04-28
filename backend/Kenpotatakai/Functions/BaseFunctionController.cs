@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Kenpotatakai.Functions
 {
-    public class KenpotatakaiFunctionController
+    public class BaseFunctionController
     {
         private const string ClaimTypeStableSecurityId =
             "stable_sid";
@@ -23,7 +23,7 @@ namespace Kenpotatakai.Functions
 
         protected readonly IMediator Mediator;
 
-        public KenpotatakaiFunctionController(IMediator mediator)
+        public BaseFunctionController(IMediator mediator)
         {
             Mediator = mediator;
         }
@@ -33,7 +33,7 @@ namespace Kenpotatakai.Functions
             return claimsPrincipal?.Identity != null && claimsPrincipal.Identity.IsAuthenticated;
         }
 
-        protected string GetStableSecurityId(HttpRequestMessage request, ClaimsPrincipal claimsPrincipal)
+        protected string GetSecurityId(HttpRequestMessage request, ClaimsPrincipal claimsPrincipal)
         {
             var claims = IsRunningLocally(claimsPrincipal)
                 ? request.GetEasyAuthClaims()

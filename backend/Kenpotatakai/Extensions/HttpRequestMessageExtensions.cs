@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
@@ -33,6 +34,11 @@ namespace Kenpotatakai
             return JsonConvert.DeserializeObject<T>(body);
         }
 
+        public static string GetQueryParameter(this HttpRequestMessage request, string key)
+        {
+            return System.Web.HttpUtility.ParseQueryString(request.RequestUri.Query)[key];
+        }
+
         public static HttpResponseMessage ResponseTo(this HttpRequestMessage request, GuardException exception)
         {
             var body = new GuardExceptionResponse
@@ -51,6 +57,16 @@ namespace Kenpotatakai
         public static HttpResponseMessage RespondBadRequest<T>(this HttpRequestMessage request, T body)
         {
             return request.CreateResponse(HttpStatusCode.BadRequest, body, JsonMediaTypeFormatter());
+        }
+
+        public static HttpResponseMessage RespondNotFound(this HttpRequestMessage request)
+        {
+            return request.CreateResponse(HttpStatusCode.NotFound);
+        }
+
+        public static HttpResponseMessage RespondUnauthorized(this HttpRequestMessage request)
+        {
+            return request.CreateResponse(HttpStatusCode.Unauthorized);
         }
 
         public static MediaTypeFormatter JsonMediaTypeFormatter()

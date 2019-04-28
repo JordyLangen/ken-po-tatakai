@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
@@ -25,7 +26,8 @@ namespace Kenpotatakai.Client
         {
             {nameof(GetProviderBasedProfile), GetProviderBasedProfile},
             {nameof(GetClaims), GetClaims},
-            {nameof(RegisterUser), RegisterUser}
+            {nameof(RegisterUser), RegisterUser},
+            {nameof(GetUser), GetUser}
         };
 
         static void Main(string[] args)
@@ -104,6 +106,23 @@ namespace Kenpotatakai.Client
             Console.WriteLine("RegisterUser result:");
             Console.WriteLine(response.StatusCode);
             Console.WriteLine(JObject.Parse(response.Content).ToString(Formatting.Indented));
+            Console.WriteLine();
+        }
+
+        static void GetUser()
+        {
+            Console.WriteLine("Executing GetUser...");
+
+            var request = new RestRequest("/api/users", Method.GET);
+            request.AddQueryParameter("providerId", "142749740");
+            var response = _restClient.Execute(request);
+
+            Console.WriteLine("GetUser result:");
+            Console.WriteLine(response.StatusCode);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                Console.WriteLine(JObject.Parse(response.Content).ToString(Formatting.Indented));
+            }
             Console.WriteLine();
         }
     }
