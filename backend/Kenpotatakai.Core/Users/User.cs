@@ -1,14 +1,19 @@
-﻿namespace Kenpotatakai.Core.Users
+﻿using Newtonsoft.Json;
+
+namespace Kenpotatakai.Core.Users
 {
     public class User
     {
-        public string Id { get; }
+        public string Id { get; set; }
+        [JsonProperty("platformId")]
         public string PlatformId { get; set; }
+        [JsonProperty("providerId")]
         public string ProviderId { get; set; }
-        public string ProviderName { get; }
-        public string EmailAddress { get; }
-        public string DisplayName { get; }
-        public string AvatarUrl { get; }
+        [JsonProperty("providerName")]
+        public string ProviderName { get; set; }
+        public string EmailAddress { get; set; }
+        public string DisplayName { get; set; }
+        public string AvatarUrl { get; set; }
 
         public User()
         {

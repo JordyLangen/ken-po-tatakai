@@ -8,9 +8,7 @@ using Microsoft.Azure.Documents;
 
 namespace Kenpotatakai.Core.Users.UseCases
 {
-    public class RegisterUserUseCase : IRequestHandler<
-        RegisterUserRequest,
-        RegisterUserResponse>
+    public class RegisterUserUseCase : IRequestHandler<RegisterUserRequest, RegisterUserResponse>
     {
         private readonly IUserRepository _repository;
 

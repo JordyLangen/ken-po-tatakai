@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Kenpotatakai.Core;
@@ -11,15 +12,43 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace Kenpotatakai.Functions
 {
-    public class UserFunctionController : KenpotatakaiFunctionController
+    public class UserFunctionController : BaseFunctionController
     {
         public UserFunctionController(IMediator mediator) : base(mediator)
         {
         }
 
+        [FunctionName(nameof(GetUser))]
+        public async Task<HttpResponseMessage> GetUser(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "users")] HttpRequestMessage request,
+            ClaimsPrincipal principal)
+        {
+            if (!IsAuthenticated(principal))
+            {
+                return request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+
+            var getUserRequest = new GetUserRequest
+            {
+                ProviderName = GetIdentityProvider(request, principal),
+                SecurityId = GetSecurityId(request, principal),
+                ProviderId = request.GetQueryParameter("providerId")
+            };
+
+            var response = await Mediator.Send(getUserRequest);
+
+            if (string.IsNullOrEmpty(response?.PlatformId))
+            {
+                return request.RespondNotFound();
+            }
+
+            return request.RespondOk(response);
+        }
+
         [FunctionName(nameof(GetProviderBasedProfile))]
         public async Task<HttpResponseMessage> GetProviderBasedProfile(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "users/provider/profile")] HttpRequestMessage request,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "users/provider/profile")]
+            HttpRequestMessage request,
             ClaimsPrincipal principal)
         {
             if (!IsAuthenticated(principal))
@@ -76,7 +105,7 @@ namespace Kenpotatakai.Functions
 
             var registerUserRequest = await request.GetRequestBody<RegisterUserRequest>();
 
-            registerUserRequest.SecurityId = GetStableSecurityId(request, principal);
+            registerUserRequest.SecurityId = GetSecurityId(request, principal);
             registerUserRequest.ProviderName = GetIdentityProvider(request, principal);
 
             try
