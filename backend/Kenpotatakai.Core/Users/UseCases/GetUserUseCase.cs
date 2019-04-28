@@ -17,12 +17,16 @@ namespace Kenpotatakai.Core.Users.UseCases
 
         public async Task<GetUserResponse> Handle(GetUserRequest request, CancellationToken cancellationToken)
         {
-            Guard.AgainstNonEmpty(request.ProviderId, nameof(request.ProviderId));
             Guard.AgainstNonEmpty(request.ProviderName, nameof(request.ProviderName));
             Guard.AgainstNonEmpty(request.SecurityId, nameof(request.SecurityId));
 
-            var user = //await _repository.GetBy($"{request.ProviderName}:{request.SecurityId}") ??
-                       await _repository.GetBy(request.ProviderId, request.ProviderName);
+            var user = await _repository.GetBy($"{request.ProviderName}:{request.SecurityId}");
+
+            if (user == null)
+            {
+                Guard.AgainstNonEmpty(request.ProviderId, nameof(request.ProviderId));
+                await _repository.GetBy(request.ProviderId, request.ProviderName);
+            }
 
             return user != null ? GetUserResponse.MapFrom(user) : GetUserResponse.None();
         }
