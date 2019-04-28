@@ -93,13 +93,8 @@ namespace Kenpotatakai.Client
             Console.WriteLine("Executing RegisterUser...");
 
             var request = new RestRequest("/api/users", Method.POST);
-            request.AddJsonBody(new RegisterUserRequest
-            {
-                DisplayName = "Jordy Langen",
-                EmailAddress = "jordylangen@gmail.com",
-                ProviderId = "142749740",
-                AvatarUrl = "https://pbs.twimg.com/profile_images/949275818278178816/1B4Ia7bw_400x400.jpg"
-            });
+            var requestBody = JsonConvert.DeserializeObject<RegisterUserRequest>(File.ReadAllText("Requests/RegisterUser.json"));
+            request.AddJsonBody(requestBody);
 
             var response = _restClient.Execute(request);
 
@@ -114,7 +109,8 @@ namespace Kenpotatakai.Client
             Console.WriteLine("Executing GetUser...");
 
             var request = new RestRequest("/api/users", Method.GET);
-            request.AddQueryParameter("providerId", "142749740");
+            var requestParameters = JObject.Parse(File.ReadAllText("Requests/GetUser.json"));
+            request.AddQueryParameter("providerId", requestParameters["providerId"].Value<string>());
             var response = _restClient.Execute(request);
 
             Console.WriteLine("GetUser result:");
