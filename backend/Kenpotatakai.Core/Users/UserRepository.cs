@@ -17,7 +17,6 @@ namespace Kenpotatakai.Core.Users
         {
             var existingUser = DocumentClient.CreateDocumentQuery<User>(CollectionUri, new FeedOptions
                 {
-                    MaxItemCount = -1,
                     EnableCrossPartitionQuery = true
                 })
                 .Where(user => user.PlatformId == platformId)
