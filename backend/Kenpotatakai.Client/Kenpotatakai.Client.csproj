@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kenpotatakai.Core\Kenpotatakai.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="authenticationtoken.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Kenpotatakai.Core.Users.Messages;
 using MediatR;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Newtonsoft.Json;
 
 namespace Kenpotatakai.Functions
 {
@@ -21,7 +18,7 @@ namespace Kenpotatakai.Functions
 
         [FunctionName(nameof(GetProviderBasedProfile))]
         public async Task<HttpResponseMessage> GetProviderBasedProfile(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "users/provider/profile")]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "users/provider/profile")]
             HttpRequestMessage request,
             ClaimsPrincipal principal)
         {
@@ -37,7 +34,49 @@ namespace Kenpotatakai.Functions
 
             var response = await Mediator.Send(createProviderBasedProfileRequest);
 
-            return request.CreateResponse(HttpStatusCode.OK, response);
+            return request.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter());
+        }
+
+        [FunctionName(nameof(GetClaims))]
+        public HttpResponseMessage GetClaims(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "users/claims")] HttpRequestMessage request,
+            ClaimsPrincipal principal)
+        {
+            if (!IsAuthenticated(principal))
+            {
+                return request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+
+            var claims = principal.Claims
+                .Select(claim => new
+                {
+                    claim.Type,
+                    claim.Value
+                })
+                .ToList();
+
+            return request.CreateResponse(HttpStatusCode.OK, claims, JsonMediaTypeFormatter());
+        }
+
+        [FunctionName(nameof(RegisterUser))]
+        public async Task<HttpResponseMessage> RegisterUser(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "POST", Route = "users")]
+            HttpRequestMessage request,
+            ClaimsPrincipal principal)
+        {
+            if (!IsAuthenticated(principal))
+            {
+                return request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+
+            var registerUserRequest = await GetRequestBody<RegisterUserRequest>(request);
+
+            registerUserRequest.SecurityId = GetStableSecurityId(request, principal);
+            registerUserRequest.ProviderName = GetIdentityProvider(request, principal);
+
+            var response = await Mediator.Send(registerUserRequest);
+
+            return request.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter());
         }
     }
 }

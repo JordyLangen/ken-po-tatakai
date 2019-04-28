@@ -6,9 +6,11 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="6.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Azure.DocumentDB" Version="2.3.0" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.*" />
+    <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.27" />
     <PackageReference Include="RestSharp" Version="106.6.9" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.4.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kenpotatakai.Core\Kenpotatakai.Core.csproj" />
