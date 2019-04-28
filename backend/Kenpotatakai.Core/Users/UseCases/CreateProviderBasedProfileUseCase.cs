@@ -58,6 +58,7 @@ namespace Kenpotatakai.Core.Users.UseCases
 
             return new CreateProviderBasedProfileResponse
             {
+                ProviderId = GetClaim(authMeResponse, ClaimTypes.NameIdentifier),
                 DisplayName = GetClaim(authMeResponse, ClaimTypes.Name),
                 NamedId = authMeResponse.UserId,
                 ProviderName = authMeResponse.ProviderName,

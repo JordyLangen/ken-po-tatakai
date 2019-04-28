@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Kenpotatakai.Core
 {
@@ -9,7 +8,7 @@ namespace Kenpotatakai.Core
         {
             if (value == null)
             {
-                throw new ArgumentException($"{propertyName} cannot be null");
+                throw new GuardException($"{propertyName} cannot be null");
             }
         }
 
@@ -17,16 +16,16 @@ namespace Kenpotatakai.Core
         {
             if (string.IsNullOrEmpty(value))
             {
-                throw new ArgumentException($"{propertyName} cannot be null");
+                throw new GuardException($"{propertyName} cannot be null");
             }
         }
 
         public static void AgainstInvalidEmailAddress(string value)
         {
             var validator = new EmailAddressAttribute();
-            if (!validator.IsValid(value))
+            if (string.IsNullOrEmpty(value) || !validator.IsValid(value))
             {
-                throw new ArgumentException($"{value} is not a valid email address");
+                throw new GuardException($"{value} is not a valid email address");
             }
         }
     }

@@ -95,6 +95,7 @@ namespace Kenpotatakai.Client
             {
                 DisplayName = "Jordy Langen",
                 EmailAddress = "jordylangen@gmail.com",
+                ProviderId = "142749740",
                 AvatarUrl = "https://pbs.twimg.com/profile_images/949275818278178816/1B4Ia7bw_400x400.jpg"
             });
 

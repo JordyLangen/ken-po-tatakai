@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Kenpotatakai.Core;
 using Kenpotatakai.Core.Users.Messages;
 using MediatR;
 using Microsoft.Azure.WebJobs;
@@ -18,8 +19,7 @@ namespace Kenpotatakai.Functions
 
         [FunctionName(nameof(GetProviderBasedProfile))]
         public async Task<HttpResponseMessage> GetProviderBasedProfile(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "users/provider/profile")]
-            HttpRequestMessage request,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "users/provider/profile")] HttpRequestMessage request,
             ClaimsPrincipal principal)
         {
             if (!IsAuthenticated(principal))
@@ -29,12 +29,18 @@ namespace Kenpotatakai.Functions
 
             var createProviderBasedProfileRequest = new CreateProviderBasedProfileRequest
             {
-                AuthenticationToken = request.Headers.Authorization.Parameter
+                AuthenticationToken = request.GetEasyAuthToken()
             };
 
-            var response = await Mediator.Send(createProviderBasedProfileRequest);
-
-            return request.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter());
+            try
+            {
+                var response = await Mediator.Send(createProviderBasedProfileRequest);
+                return request.RespondOk(response);
+            }
+            catch (GuardException exception)
+            {
+                return request.ResponseTo(exception);
+            }
         }
 
         [FunctionName(nameof(GetClaims))]
@@ -55,13 +61,12 @@ namespace Kenpotatakai.Functions
                 })
                 .ToList();
 
-            return request.CreateResponse(HttpStatusCode.OK, claims, JsonMediaTypeFormatter());
+            return request.RespondOk(claims);
         }
 
         [FunctionName(nameof(RegisterUser))]
         public async Task<HttpResponseMessage> RegisterUser(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "POST", Route = "users")]
-            HttpRequestMessage request,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "POST", Route = "users")] HttpRequestMessage request,
             ClaimsPrincipal principal)
         {
             if (!IsAuthenticated(principal))
@@ -69,14 +74,23 @@ namespace Kenpotatakai.Functions
                 return request.CreateResponse(HttpStatusCode.Unauthorized);
             }
 
-            var registerUserRequest = await GetRequestBody<RegisterUserRequest>(request);
+            var registerUserRequest = await request.GetRequestBody<RegisterUserRequest>();
 
             registerUserRequest.SecurityId = GetStableSecurityId(request, principal);
             registerUserRequest.ProviderName = GetIdentityProvider(request, principal);
 
-            var response = await Mediator.Send(registerUserRequest);
+            try
+            {
+                var response = await Mediator.Send(registerUserRequest);
 
-            return request.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter());
+                return request.CreateResponse(response.ResultCode ?? HttpStatusCode.InternalServerError,
+                    response,
+                    JsonMediaTypeFormatter());
+            }
+            catch (GuardException exception)
+            {
+                return request.ResponseTo(exception);
+            }
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Kenpotatakai.Core.Users.Messages;
 using MediatR;
+using Microsoft.Azure.Documents;
 
 namespace Kenpotatakai.Core.Users.UseCases
 {
@@ -21,18 +23,29 @@ namespace Kenpotatakai.Core.Users.UseCases
         {
             var user = new User(
                 request.SecurityId,
+                request.ProviderId,
                 request.ProviderName,
                 request.EmailAddress,
                 request.DisplayName,
                 request.AvatarUrl);
 
-            var result = await _repository.Create(user);
-
-            return new RegisterUserResponse
+            try
             {
-                UserId = result.Resource.Id,
-                IsCreated = result.StatusCode == HttpStatusCode.OK || result.StatusCode == HttpStatusCode.Created
-            };
+                var result = await _repository.Create(user);
+
+                return new RegisterUserResponse
+                {
+                    UserId = result.Resource.Id,
+                    ResultCode = result.StatusCode
+                };
+            }
+            catch (DocumentClientException exception)
+            {
+                return new RegisterUserResponse
+                {
+                    ResultCode = exception.StatusCode
+                };
+            }
         }
     }
 }
