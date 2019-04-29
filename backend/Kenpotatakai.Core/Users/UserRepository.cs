@@ -22,7 +22,7 @@ namespace Kenpotatakai.Core.Users
                 .Where(user => user.PlatformId == platformId)
                 .ToList()
                 .SingleOrDefault();
-
+            
             return Task.FromResult(existingUser);
         }
 
