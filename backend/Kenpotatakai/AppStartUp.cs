@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Kenpotatakai;
+using Kenpotatakai.Core.Infrastructure;
 using MediatR;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
@@ -63,7 +64,7 @@ namespace Kenpotatakai
                 new Uri(config["Cosmos:EndpointUrl"]),
                 config["Cosmos:Key"], new JsonSerializerSettings
                 {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    ContractResolver = new PrivateSetterAndConstructorCamelCasePropertyNamesContractResolver()
                 }));
 
             RegisterTransientImplementedInterfaces(services, "Repository");
