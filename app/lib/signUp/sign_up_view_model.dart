@@ -10,16 +10,18 @@ class SignUpViewModel {
 
   bool get didSelectProvider => selectedProvider != null && selectedProvider != SignUpProvider.NONE;
 
-  final Function(SignUpProvider) startSignUp;
+  final Function(SignUpProvider) signUpAt;
 
-  SignUpViewModel({this.selectedProvider, this.displayName, this.startSignUp});
+  SignUpViewModel({this.selectedProvider, this.displayName, this.signUpAt});
 
   factory SignUpViewModel.fromStore(Store<AppState> store) {
     final signUpState = store.state.signUpState;
     return new SignUpViewModel(
       displayName: signUpState.displayName,
       selectedProvider: signUpState.provider,
-      startSignUp: (provider) => store.dispatch(StartSignUpAction(provider))
+      signUpAt: (provider) {
+        store.dispatch(SignUpAtProviderAction(provider));
+      }
     );
   }
 }
