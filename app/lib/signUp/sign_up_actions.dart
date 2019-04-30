@@ -2,8 +2,8 @@ import 'package:kenpotatakai/signUp/sign_up_provider.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-class StartSignUpAction {
+class SignUpAtProviderAction {
   final SignUpProvider provider;
 
-  StartSignUpAction(this.provider);
+  SignUpAtProviderAction(this.provider);
 }

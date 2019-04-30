@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:kenpotatakai/api/kenpotatakai_api.dart';
 import 'package:kenpotatakai/app_colors.dart';
+import 'package:kenpotatakai/app_routes.dart';
 import 'package:kenpotatakai/extensions/string_extensions.dart';
 import 'package:kenpotatakai/redux/app_state.dart';
 import 'package:kenpotatakai/signUp/sign_up_provider.dart';
 import 'package:kenpotatakai/signUp/sign_up_view_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -27,23 +26,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget _build(BuildContext context, SignUpViewModel viewModel) {
-    var body = viewModel.didSelectProvider
-        ? _buildProviderLoginView(viewModel)
-        : _buildProviderOverview(viewModel);
+    var body = _buildProviderOverview(viewModel);
 
     return Scaffold(backgroundColor: AppColors.primaryColor, body: body);
-  }
-
-  Widget _buildProviderLoginView(SignUpViewModel viewModel) {
-    var providerName =
-        viewModel.selectedProvider.toString().split('.').last.toLowerCase();
-
-    return Container(
-        color: AppColors.primaryColor,
-        child: WebView(
-            initialUrl: '${KenpotatakaiApi.authSignUpEndpoint}/$providerName',
-            javascriptMode: JavascriptMode.unrestricted,
-            onPageFinished: (url) => print(url)));
   }
 
   Widget _buildProviderOverview(SignUpViewModel viewModel) {
@@ -94,7 +79,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Text(text, style: TextStyle(color: Colors.white))
                     ])),
             onPressed: () {
-              viewModel.startSignUp(provider);
+              viewModel.signUpAt(provider);
+              Navigator.pushNamed(context, Routes.SignUpAtProvider);
             }));
   }
 }
