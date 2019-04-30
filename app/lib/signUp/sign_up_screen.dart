@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:kenpotatakai/api/kenpotatakai_api.dart';
+import 'package:kenpotatakai/app_colors.dart';
 import 'package:kenpotatakai/extensions/string_extensions.dart';
 import 'package:kenpotatakai/redux/app_state.dart';
 import 'package:kenpotatakai/signUp/sign_up_provider.dart';
@@ -29,7 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ? _buildProviderLoginView(viewModel)
         : _buildProviderOverview(viewModel);
 
-    return Scaffold(backgroundColor: Color(0xFF0A1026), body: body);
+    return Scaffold(backgroundColor: AppColors.primaryColor, body: body);
   }
 
   Widget _buildProviderLoginView(SignUpViewModel viewModel) {
@@ -37,27 +39,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
         viewModel.selectedProvider.toString().split('.').last.toLowerCase();
 
     return Container(
-      color: Color(0xFF0A1026),
+        color: AppColors.primaryColor,
         child: WebView(
-      initialUrl: 'https://ken-po-tatakai.azurewebsites.net/.auth/login/' +
-          providerName,
-      javascriptMode: JavascriptMode.unrestricted,
-      onPageFinished: (url) => print(url)
-    ));
+            initialUrl: '${KenpotatakaiApi.authSignUpEndpoint}/$providerName',
+            javascriptMode: JavascriptMode.unrestricted,
+            onPageFinished: (url) => print(url)));
   }
 
   Widget _buildProviderOverview(SignUpViewModel viewModel) {
     final twitterRow = _buildProvider(
         SignUpProvider.TWITTER, FontAwesomeIcons.twitter, viewModel);
-    final facebookRow = _buildProvider(
-        SignUpProvider.FACEBOOK, FontAwesomeIcons.facebook, viewModel);
 
     return Center(
       child: ListView(
           shrinkWrap: true,
           padding: EdgeInsets.only(left: 24.0, right: 24.0),
           children: [
-            Text('Choose a provider',
+            Text('Welcome to Kenpotatakai!',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center),
             SizedBox(height: 16.0),
@@ -66,9 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 style: TextStyle(fontSize: 12),
                 textAlign: TextAlign.center),
             SizedBox(height: 32.0),
-            twitterRow,
-            SizedBox(height: 16.0),
-            facebookRow
+            twitterRow
           ]),
     );
   }
@@ -78,22 +74,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
     var providerName = capitalize(provider.toString().split('.').last);
     final text = 'Sign up with ' + providerName;
 
-    return FlatButton(
-        padding: EdgeInsets.all(0),
-        child: Container(
-            padding: EdgeInsets.all(4),
-            color: Color(0xFF2561DD),
-            child: Row(mainAxisSize: MainAxisSize.max, children: [
-              Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Icon(
-                    icon,
-                    color: Colors.white,
-                  )),
-              Text(text, style: TextStyle(color: Colors.white))
-            ])),
-        onPressed: () {
-          viewModel.startSignUp(provider);
-        });
+    return ClipRRect(
+        borderRadius: BorderRadius.circular(32.0),
+        child: FlatButton(
+            padding: EdgeInsets.all(0),
+            child: Container(
+                padding: EdgeInsets.all(4),
+                color: AppColors.accentColor,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.only(right: 16.0, top: 8.0, bottom: 8.0),
+                          child: Icon(
+                            icon,
+                            color: Colors.white,
+                          )),
+                      Text(text, style: TextStyle(color: Colors.white))
+                    ])),
+            onPressed: () {
+              viewModel.startSignUp(provider);
+            }));
   }
 }

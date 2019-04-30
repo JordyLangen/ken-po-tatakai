@@ -64,7 +64,7 @@ namespace Kenpotatakai
                 new Uri(config["Cosmos:EndpointUrl"]),
                 config["Cosmos:Key"], new JsonSerializerSettings
                 {
-                    ContractResolver = new PrivateSetterAndConstructorCamelCasePropertyNamesContractResolver()
+                    ContractResolver = new CamelCaseIncludingPrivateSetterPropertyNamesContractResolver()
                 }));
 
             RegisterTransientImplementedInterfaces(services, "Repository");
