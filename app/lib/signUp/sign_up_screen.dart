@@ -72,10 +72,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     children: [
                       Padding(
                           padding: EdgeInsets.only(right: 16.0, top: 8.0, bottom: 8.0),
-                          child: Icon(
-                            icon,
-                            color: Colors.white,
-                          )),
+                          child: Hero(
+                              tag: providerName.toLowerCase(),
+                              child: Icon(
+                                icon,
+                                color: Colors.white,
+                              ))),
                       Text(text, style: TextStyle(color: Colors.white))
                     ])),
             onPressed: () {

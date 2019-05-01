@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kenpotatakai/api/kenpotatakai_api.dart';
 import 'package:kenpotatakai/app_colors.dart';
 import 'package:kenpotatakai/redux/app_state.dart';
@@ -30,13 +31,49 @@ class _SignUpAtProviderScreenState extends State<SignUpAtProviderScreen> {
 
   Widget _buildProviderLoginView(SignUpViewModel viewModel) {
     var providerName =
-    viewModel.selectedProvider.toString().split('.').last.toLowerCase();
+        viewModel.selectedProvider.toString().split('.').last.toLowerCase();
 
+    return Stack(
+      children: [
+        _buildProviderLogoContainer(viewModel, providerName),
+        _buildWebView(viewModel, providerName)
+      ],
+    );
+  }
+
+  Widget _buildProviderLogoContainer(
+      SignUpViewModel viewModel, String providerName) {
     return Container(
-        color: AppColors.primaryColor,
-        child: WebView(
-            initialUrl: '${KenpotatakaiApi.authSignUpEndpoint}/$providerName',
-            javascriptMode: JavascriptMode.unrestricted,
-            onPageFinished: (url) => print(url)));
+      color: Color(0xFF00acee),
+      child: Center(
+        child: Hero(
+          tag: providerName,
+          child: Icon(
+            FontAwesomeIcons.twitter,
+            color: Colors.white,
+            size: 64.0,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWebView(SignUpViewModel viewModel, String providerName) {
+    return AnimatedOpacity(
+        opacity: viewModel.isLoading ? 0 : 1,
+        duration: Duration(milliseconds: 200),
+        child: Container(
+            color: AppColors.primaryColor,
+            child: WebView(
+                initialUrl:
+                    '${KenpotatakaiApi.AuthSignUpEndpoint}/$providerName',
+                javascriptMode: JavascriptMode.unrestricted,
+                onPageFinished: (url) =>
+                    this.handlePageLoaded(viewModel, url))));
+  }
+
+  void handlePageLoaded(SignUpViewModel viewModel, String url) {
+    viewModel.signUpPageLoaded();
+    print(url);
   }
 }
