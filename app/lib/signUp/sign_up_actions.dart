@@ -7,3 +7,8 @@ class SignUpAtProviderAction {
 
   SignUpAtProviderAction(this.provider);
 }
+
+@immutable
+class SignUpPageLoadedAction {
+
+}
