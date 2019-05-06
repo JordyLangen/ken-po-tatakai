@@ -1,14 +1,18 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web.Http;
 using Kenpotatakai.Core;
 using Kenpotatakai.Core.Users.Messages;
+using Kenpotatakai.Extensions;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Newtonsoft.Json;
 
 namespace Kenpotatakai.Functions
 {
@@ -19,41 +23,41 @@ namespace Kenpotatakai.Functions
         }
 
         [FunctionName(nameof(GetUser))]
-        public async Task<HttpResponseMessage> GetUser(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "users")] HttpRequestMessage request,
+        public async Task<IActionResult> GetUser(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "users")] HttpRequest request,
             ClaimsPrincipal principal)
         {
             if (!IsAuthenticated(principal))
             {
-                return request.CreateResponse(HttpStatusCode.Unauthorized);
+                return new UnauthorizedResult();
             }
 
             var getUserRequest = new GetUserRequest
             {
                 ProviderName = GetIdentityProvider(request, principal),
                 SecurityId = GetSecurityId(request, principal),
-                ProviderId = request.GetQueryParameter("providerId")
+                ProviderId = request.Query["providerId"]
             };
 
             var response = await Mediator.Send(getUserRequest);
 
             if (string.IsNullOrEmpty(response?.PlatformId))
             {
-                return request.RespondNotFound();
+                return new NotFoundResult();
             }
 
-            return request.RespondOk(response);
+            return new OkObjectResult(response);
         }
 
         [FunctionName(nameof(GetProviderBasedProfile))]
-        public async Task<HttpResponseMessage> GetProviderBasedProfile(
+        public async Task<IActionResult> GetProviderBasedProfile(
             [HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "users/provider/profile")]
-            HttpRequestMessage request,
+            HttpRequest request,
             ClaimsPrincipal principal)
         {
             if (!IsAuthenticated(principal))
             {
-                return request.CreateResponse(HttpStatusCode.Unauthorized);
+                return new UnauthorizedResult();
             }
 
             var createProviderBasedProfileRequest = new CreateProviderBasedProfileRequest
@@ -64,22 +68,22 @@ namespace Kenpotatakai.Functions
             try
             {
                 var response = await Mediator.Send(createProviderBasedProfileRequest);
-                return request.RespondOk(response);
+                return new OkObjectResult(response);
             }
             catch (GuardException exception)
             {
-                return request.ResponseTo(exception);
+                return new BadRequestErrorMessageResult(exception.Message);
             }
         }
 
         [FunctionName(nameof(GetClaims))]
-        public HttpResponseMessage GetClaims(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "users/claims")] HttpRequestMessage request,
+        public IActionResult GetClaims(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "users/claims")] HttpRequest request,
             ClaimsPrincipal principal)
         {
             if (!IsAuthenticated(principal))
             {
-                return request.CreateResponse(HttpStatusCode.Unauthorized);
+                return new UnauthorizedResult();
             }
 
             var claims = principal.Claims
@@ -90,20 +94,20 @@ namespace Kenpotatakai.Functions
                 })
                 .ToList();
 
-            return request.RespondOk(claims);
+            return new OkObjectResult(claims);
         }
 
         [FunctionName(nameof(RegisterUser))]
-        public async Task<HttpResponseMessage> RegisterUser(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "POST", Route = "users")] HttpRequestMessage request,
+        public async Task<IActionResult> RegisterUser(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "POST", Route = "users")] HttpRequest request,
             ClaimsPrincipal principal)
         {
             if (!IsAuthenticated(principal))
             {
-                return request.CreateResponse(HttpStatusCode.Unauthorized);
+                return new UnauthorizedResult();
             }
-
-            var registerUserRequest = await request.GetRequestBody<RegisterUserRequest>();
+            
+            var registerUserRequest = request.GetRequestBody<RegisterUserRequest>();
 
             registerUserRequest.SecurityId = GetSecurityId(request, principal);
             registerUserRequest.ProviderName = GetIdentityProvider(request, principal);
@@ -112,13 +116,21 @@ namespace Kenpotatakai.Functions
             {
                 var response = await Mediator.Send(registerUserRequest);
 
-                return request.CreateResponse(response.ResultCode ?? HttpStatusCode.InternalServerError,
-                    response,
-                    JsonMediaTypeFormatter());
+                if (response.ResultCode == HttpStatusCode.OK || response.ResultCode == HttpStatusCode.Created)
+                {
+                    return new CreatedAtRouteResult("users", response.UserId, response);
+                }
+
+                if (response.ResultCode == HttpStatusCode.Conflict)
+                {
+                    return new System.Web.Http.ConflictResult();
+                }
+
+                return new InternalServerErrorResult();
             }
             catch (GuardException exception)
             {
-                return request.ResponseTo(exception);
+                return new BadRequestErrorMessageResult(exception.Message);
             }
         }
     }

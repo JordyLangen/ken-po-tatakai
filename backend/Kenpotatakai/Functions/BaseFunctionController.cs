@@ -3,7 +3,9 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Security.Claims;
 using System.Security.Principal;
+using Kenpotatakai.Extensions;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace Kenpotatakai.Functions
 {
@@ -33,7 +35,7 @@ namespace Kenpotatakai.Functions
             return claimsPrincipal?.Identity != null && claimsPrincipal.Identity.IsAuthenticated;
         }
 
-        protected string GetSecurityId(HttpRequestMessage request, ClaimsPrincipal claimsPrincipal)
+        protected string GetSecurityId(HttpRequest request, ClaimsPrincipal claimsPrincipal)
         {
             var claims = IsRunningLocally(claimsPrincipal)
                 ? request.GetEasyAuthClaims()
@@ -42,7 +44,7 @@ namespace Kenpotatakai.Functions
             return claims.SingleOrDefault(claim => claim.Type == ClaimTypeStableSecurityId)?.Value;
         }
 
-        protected string GetIdentityProvider(HttpRequestMessage request, ClaimsPrincipal claimsPrincipal)
+        protected string GetIdentityProvider(HttpRequest request, ClaimsPrincipal claimsPrincipal)
         {
             var claims = IsRunningLocally(claimsPrincipal)
                 ? request.GetEasyAuthClaims()
@@ -58,11 +60,6 @@ namespace Kenpotatakai.Functions
             return claims.Count == 1 &&
                    claims.SingleOrDefault(claim => claim.Type == ClaimTypeAuthLevel)?
                        .Value.ToLowerInvariant() == "admin";
-        }
-
-        protected MediaTypeFormatter JsonMediaTypeFormatter()
-        {
-            return HttpRequestMessageExtensions.JsonMediaTypeFormatter();
         }
     }
 }
