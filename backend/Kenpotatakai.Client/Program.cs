@@ -35,7 +35,6 @@ namespace Kenpotatakai.Client
             _token = File.ReadAllText("authenticationtoken.txt");
             _restClient = new RestClient(LocalFunctionsApiUrl);
             _restClient.AddDefaultHeader("X-ZUMO-AUTH", _token);
-            _restClient.AddDefaultHeader("Authorization", "Bearer " + _token);
 
             ShowRequestOptions();
         }

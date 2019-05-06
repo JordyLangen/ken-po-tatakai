@@ -1,11 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:kenpotatakai/api/kenpotatakai_api.dart';
-import 'package:kenpotatakai/app_colors.dart';
+import 'package:kenpotatakai/api/kenpotatakai_api_client.dart';
+import 'package:kenpotatakai/app_routes.dart';
 import 'package:kenpotatakai/redux/app_state.dart';
 import 'package:kenpotatakai/signUp/sign_up_view_model.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class SignUpAtProviderScreen extends StatefulWidget {
   @override
@@ -15,6 +17,27 @@ class SignUpAtProviderScreen extends StatefulWidget {
 }
 
 class _SignUpAtProviderScreenState extends State<SignUpAtProviderScreen> {
+
+  final _webviewController = FlutterWebviewPlugin();
+  SignUpViewModel _signUpViewModel;
+  String _providerName;
+  StreamSubscription<String> _onUrlChanged;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _onUrlChanged = _webviewController.onUrlChanged.listen((String url) {
+      handlePageLoaded(url);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _onUrlChanged.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<AppState, SignUpViewModel>(
@@ -24,25 +47,22 @@ class _SignUpAtProviderScreenState extends State<SignUpAtProviderScreen> {
   }
 
   Widget _build(BuildContext context, SignUpViewModel viewModel) {
-    var body = _buildProviderLoginView(viewModel);
+    _signUpViewModel = viewModel;
+    _providerName = viewModel.selectedProvider.toString()
+        .split('.').last.toLowerCase();
 
-    return Scaffold(backgroundColor: AppColors.primaryColor, body: body);
-  }
-
-  Widget _buildProviderLoginView(SignUpViewModel viewModel) {
-    var providerName =
-        viewModel.selectedProvider.toString().split('.').last.toLowerCase();
-
-    return Stack(
-      children: [
-        _buildProviderLogoContainer(viewModel, providerName),
-        _buildWebView(viewModel, providerName)
-      ],
+    // var body = _buildProviderLoginView(viewModel);
+    return WebviewScaffold(
+      url: '${KenpotatakaiApiClient.AuthSignUpEndpoint}/$_providerName',
+      withZoom: true,
+      withLocalStorage: true,
+      withJavascript: true,
+      hidden: true,
+      initialChild: _buildProviderLogoContainer(_providerName),
     );
   }
 
-  Widget _buildProviderLogoContainer(
-      SignUpViewModel viewModel, String providerName) {
+  Widget _buildProviderLogoContainer(String providerName) {
     return Container(
       color: Color(0xFF00acee),
       child: Center(
@@ -58,22 +78,10 @@ class _SignUpAtProviderScreenState extends State<SignUpAtProviderScreen> {
     );
   }
 
-  Widget _buildWebView(SignUpViewModel viewModel, String providerName) {
-    return AnimatedOpacity(
-        opacity: viewModel.isLoading ? 0 : 1,
-        duration: Duration(milliseconds: 200),
-        child: Container(
-            color: AppColors.primaryColor,
-            child: WebView(
-                initialUrl:
-                    '${KenpotatakaiApi.AuthSignUpEndpoint}/$providerName',
-                javascriptMode: JavascriptMode.unrestricted,
-                onPageFinished: (url) =>
-                    this.handlePageLoaded(viewModel, url))));
-  }
-
-  void handlePageLoaded(SignUpViewModel viewModel, String url) {
-    viewModel.signUpPageLoaded();
-    print(url);
+  void handlePageLoaded(String url) {
+    if (url.startsWith(KenpotatakaiApiClient.AuthSignUpDoneEndpoint)) {
+      _signUpViewModel.signedUpAt(url);
+      Navigator.popAndPushNamed(context, Routes.SignUpCreateProfile);
+    }
   }
 }

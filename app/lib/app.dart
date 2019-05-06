@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kenpotatakai/app_colors.dart';
 import 'package:kenpotatakai/app_routes.dart';
 import 'package:kenpotatakai/redux/app_state.dart';
+import 'package:kenpotatakai/signUp/profile/create_profile_screen.dart';
 import 'package:kenpotatakai/signUp/provider/sign_up_at_provider_screen.dart';
 import 'package:kenpotatakai/signUp/sign_up_screen.dart';
 import 'package:redux/redux.dart';
@@ -31,7 +32,8 @@ class _AppState extends State<App> {
             initialRoute: Routes.SignUp,
             routes: {
               Routes.SignUp: (context) => SignUpScreen(),
-              Routes.SignUpAtProvider: (context) => SignUpAtProviderScreen()
+              Routes.SignUpAtProvider: (context) => SignUpAtProviderScreen(),
+              Routes.SignUpCreateProfile: (context) => CreateProfileScreen()
             }));
   }
 }
