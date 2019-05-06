@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:kenpotatakai/api/kenpotatakai_api_client.dart';
 import 'package:kenpotatakai/auth/token_response.dart';
 import 'package:kenpotatakai/redux/app_state.dart';
 import 'package:kenpotatakai/signUp/sign_up_actions.dart';
@@ -14,6 +15,10 @@ class SignUpViewModel {
   final String avatarUrl;
 
   bool get didSelectProvider => selectedProvider != null && selectedProvider != SignUpProvider.none;
+
+  String get providerName => selectedProvider.toString().split('.').last.toLowerCase();
+
+  String get providerSignUpEndpoint => '${KenpotatakaiApiClient.AuthSignUpEndpoint}/$providerName';
 
   final Function(SignUpProvider) signUpAt;
   final Function(String) signedUpAt;

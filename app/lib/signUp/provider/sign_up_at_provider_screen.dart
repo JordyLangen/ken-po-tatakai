@@ -20,7 +20,6 @@ class _SignUpAtProviderScreenState extends State<SignUpAtProviderScreen> {
 
   final _webviewController = FlutterWebviewPlugin();
   SignUpViewModel _signUpViewModel;
-  String _providerName;
   StreamSubscription<String> _onUrlChanged;
 
   @override
@@ -48,17 +47,14 @@ class _SignUpAtProviderScreenState extends State<SignUpAtProviderScreen> {
 
   Widget _build(BuildContext context, SignUpViewModel viewModel) {
     _signUpViewModel = viewModel;
-    _providerName = viewModel.selectedProvider.toString()
-        .split('.').last.toLowerCase();
 
-    // var body = _buildProviderLoginView(viewModel);
     return WebviewScaffold(
-      url: '${KenpotatakaiApiClient.AuthSignUpEndpoint}/$_providerName',
+      url: viewModel.providerSignUpEndpoint,
       withZoom: true,
       withLocalStorage: true,
       withJavascript: true,
       hidden: true,
-      initialChild: _buildProviderLogoContainer(_providerName),
+      initialChild: _buildProviderLogoContainer(viewModel.providerName),
     );
   }
 
