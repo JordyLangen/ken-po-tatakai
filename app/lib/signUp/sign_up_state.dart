@@ -1,37 +1,58 @@
-import 'package:kenpotatakai/signUp/sign_up_provider.dart';
 import 'package:meta/meta.dart';
+
+enum SignUpProvider { none, twitter }
+
+enum SignUpStatus { selectingProvider, authenticatingAtProvider, retrievingProfile, profileReceived }
 
 @immutable
 class SignUpState {
   final SignUpProvider provider;
-  final String displayName;
-  final String accessToken;
-  final bool isLoading;
-  final bool isAuthenticated;
+  final SignUpStatus status;
+  final String authenticationToken;
 
-  SignUpState({@required this.provider,
+  final String displayName;
+  final String emailAddress;
+  final String avatarUrl;
+  final String providerId;
+
+  SignUpState({
+    @required this.provider,
+    @required this.status,
     @required this.displayName,
-    @required this.accessToken,
-    @required this.isLoading,
-    @required this.isAuthenticated});
+    @required this.authenticationToken,
+    @required this.emailAddress,
+    @required this.avatarUrl,
+    @required this.providerId,
+  });
 
   factory SignUpState.initial() {
     return new SignUpState(
-        provider: SignUpProvider.NONE,
+        provider: SignUpProvider.none,
+        status: SignUpStatus.selectingProvider,
         displayName: null,
-        accessToken: null,
-        isLoading: false,
-        isAuthenticated: false);
+        authenticationToken: null,
+        providerId: null,
+        avatarUrl: null,
+        emailAddress: null);
   }
 
-  SignUpState copyWith({SignUpProvider provider, String displayName,
-    String accessToken, bool isLoading, bool isAuthenticated}) {
+  SignUpState copyWith(
+      {SignUpProvider provider,
+      SignUpStatus status,
+      String displayName,
+      String emailAddress,
+      String avatarUrl,
+      String providerId,
+      String authenticationToken,
+      bool isLoading,
+      bool isAuthenticated}) {
     return new SignUpState(
         provider: provider ?? this.provider,
-        isLoading: isLoading ?? this.isLoading,
-        accessToken: accessToken ?? this.accessToken,
+        status: status ?? this.status,
+        authenticationToken: authenticationToken ?? this.authenticationToken,
         displayName: displayName ?? this.displayName,
-        isAuthenticated: isAuthenticated ?? this.isAuthenticated
-    );
+        providerId: providerId ?? this.providerId,
+        avatarUrl: avatarUrl ?? this.avatarUrl,
+        emailAddress: emailAddress ?? this.emailAddress);
   }
 }
