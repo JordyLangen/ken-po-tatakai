@@ -4,6 +4,8 @@ enum SignUpProvider { none, twitter }
 
 enum SignUpStatus { selectingProvider, authenticatingAtProvider, retrievingProfile, profileReceived }
 
+enum SignUpPropertyKeys { displayName, emailAddress }
+
 @immutable
 class SignUpState {
   final SignUpProvider provider;
@@ -15,6 +17,9 @@ class SignUpState {
   final String avatarUrl;
   final String providerId;
 
+  final bool isDisplayNameValid;
+  final bool isEmailAddressValid;
+
   SignUpState({
     @required this.provider,
     @required this.status,
@@ -23,6 +28,8 @@ class SignUpState {
     @required this.emailAddress,
     @required this.avatarUrl,
     @required this.providerId,
+    @required this.isDisplayNameValid,
+    @required this.isEmailAddressValid,
   });
 
   factory SignUpState.initial() {
@@ -33,7 +40,9 @@ class SignUpState {
         authenticationToken: null,
         providerId: null,
         avatarUrl: null,
-        emailAddress: null);
+        emailAddress: null,
+        isDisplayNameValid: false,
+        isEmailAddressValid: false);
   }
 
   SignUpState copyWith(
@@ -45,7 +54,9 @@ class SignUpState {
       String providerId,
       String authenticationToken,
       bool isLoading,
-      bool isAuthenticated}) {
+      bool isAuthenticated,
+      bool isDisplayNameValid,
+      bool isEmailAddressValid}) {
     return new SignUpState(
         provider: provider ?? this.provider,
         status: status ?? this.status,
@@ -53,6 +64,8 @@ class SignUpState {
         displayName: displayName ?? this.displayName,
         providerId: providerId ?? this.providerId,
         avatarUrl: avatarUrl ?? this.avatarUrl,
-        emailAddress: emailAddress ?? this.emailAddress);
+        emailAddress: emailAddress ?? this.emailAddress,
+        isDisplayNameValid: isDisplayNameValid ?? this.isDisplayNameValid,
+        isEmailAddressValid: isEmailAddressValid ?? this.isEmailAddressValid);
   }
 }
