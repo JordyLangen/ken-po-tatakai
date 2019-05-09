@@ -3,6 +3,8 @@ import 'package:kenpotatakai/api/kenpotatakai_api_client.dart';
 import 'package:kenpotatakai/auth/auth_actions.dart';
 import 'package:kenpotatakai/auth/token_response.dart';
 import 'package:kenpotatakai/redux/app_state.dart';
+import 'package:kenpotatakai/redux/validation/validation_actions.dart';
+import 'package:kenpotatakai/screens.dart';
 import 'package:kenpotatakai/signUp/sign_up_state.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -41,6 +43,8 @@ ThunkAction<AppState> getProviderBasedProfileOrUser() {
       store.dispatch(UserRegisteredAction(existingUser));
     } else {
       store.dispatch(ProviderBasedProfileReceivedAction(profile));
+      store.dispatch(ValidateEmailAddress(Screen.createProfile, SignUpPropertyKeys.emailAddress, profile.emailAddress));
+      store.dispatch(ValidateNonEmpty(Screen.createProfile, SignUpPropertyKeys.displayName, profile.displayName));
     }
   };
 }
