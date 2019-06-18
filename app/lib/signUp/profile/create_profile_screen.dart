@@ -98,6 +98,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
           child: ListView(shrinkWrap: true, padding: EdgeInsets.only(left: 24.0, right: 24.0), children: [
             Text('Create your profile',
                 style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+            SizedBox(height: 16.0),
+            Text('Select an avatar and fill in your username and email address.',
+                style: TextStyle(fontSize: 14), textAlign: TextAlign.center),
             SizedBox(height: 24.0),
             avatar,
             SizedBox(height: 24.0),
