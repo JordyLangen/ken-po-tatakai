@@ -25,7 +25,6 @@ class KenpotatakaiApiClient {
 
   Future<GetProviderBasedProfileResponse> getProviderBasedProfile() async {
     var response = await _dio.get(UserProviderBasedProfileEndpoint);
-
     var responseBody = jsonDecode(response.toString());
     return GetProviderBasedProfileResponse.fromJson(responseBody);
   }
