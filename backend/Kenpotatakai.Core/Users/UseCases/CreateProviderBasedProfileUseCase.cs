@@ -53,7 +53,7 @@ namespace Kenpotatakai.Core.Users.UseCases
             var avatarUrl = GetClaim(authMeResponse, "urn:twitter:profile_image_url_https");
             if (!string.IsNullOrEmpty(avatarUrl))
             {
-                avatarUrl = avatarUrl.Replace("bw_normal.jpg", "bw_400x400.jpg");
+                avatarUrl = avatarUrl.Replace("_normal.", "_400x400.");
             }
 
             return new CreateProviderBasedProfileResponse
