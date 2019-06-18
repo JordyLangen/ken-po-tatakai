@@ -26,7 +26,8 @@ class _AppState extends State<App> {
             theme: new ThemeData(
                 brightness: Brightness.dark,
                 primaryColor: AppColors.primaryColor,
-                accentColor: AppColors.accentColor),
+                accentColor: AppColors.accentColor,
+                fontFamily: 'Raleway'),
             home: SignUpScreen(),
             // TODO: change this to the main view as soon as its developed
             initialRoute: Routes.SignUp,
