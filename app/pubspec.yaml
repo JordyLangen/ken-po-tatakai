@@ -31,3 +31,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+  - family: Raleway
+    fonts:
+    - asset: fonts/Raleway-Regular.ttf
+    - asset: fonts/Raleway-Bold.ttf
+      weight: 700
