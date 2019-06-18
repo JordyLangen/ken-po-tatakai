@@ -55,7 +55,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return AppButton(
       text: text,
       icon: FontAwesomeIcons.twitter,
-      tag: providerName,
+      tag: providerName.toLowerCase(),
       onPressed: () {
         viewModel.signUpAt(provider);
         Navigator.pushNamed(context, Routes.SignUpAtProvider);
