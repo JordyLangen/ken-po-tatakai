@@ -1,8 +1,12 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:kenpotatakai/auth/auth_state.dart';
 import 'package:kenpotatakai/signUp/sign_up_state.dart';
 import 'package:meta/meta.dart';
 
+part 'app_state.g.dart';
+
 @immutable
+@JsonSerializable()
 class AppState {
   final AuthState authState;
   final SignUpState signUpState;
@@ -13,4 +17,8 @@ class AppState {
     return new AppState(
         authState: AuthState.initial(), signUpState: SignUpState.initial());
   }
+
+  factory AppState.fromJson(Map<String, dynamic> json) => _$AppStateFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AppStateToJson(this);
 }
