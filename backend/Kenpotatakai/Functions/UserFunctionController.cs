@@ -118,7 +118,7 @@ namespace Kenpotatakai.Functions
 
                 if (response.ResultCode == HttpStatusCode.OK || response.ResultCode == HttpStatusCode.Created)
                 {
-                    return new CreatedAtRouteResult("users", response.UserId, response);
+                    return new OkObjectResult(response);
                 }
 
                 if (response.ResultCode == HttpStatusCode.Conflict)
