@@ -14,11 +14,16 @@ class AppState {
   AppState({@required this.authState, @required this.signUpState});
 
   factory AppState.initial() {
-    return new AppState(
-        authState: AuthState.initial(), signUpState: SignUpState.initial());
+    return new AppState(authState: AuthState.initial(), signUpState: SignUpState.initial());
   }
 
-  factory AppState.fromJson(Map<String, dynamic> json) => _$AppStateFromJson(json);
+  factory AppState.fromJson(Map<String, dynamic> json) {
+    if (json == null) {
+      return AppState.initial();
+    }
+
+    return _$AppStateFromJson(json);
+  }
 
   Map<String, dynamic> toJson() => _$AppStateToJson(this);
 }
