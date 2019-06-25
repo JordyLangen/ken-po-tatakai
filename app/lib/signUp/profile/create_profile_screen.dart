@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kenpotatakai/app_colors.dart';
 import 'package:kenpotatakai/redux/app_state.dart';
 import 'package:kenpotatakai/signUp/sign_up_state.dart';

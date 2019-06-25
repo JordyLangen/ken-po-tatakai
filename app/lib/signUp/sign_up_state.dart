@@ -1,4 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
+
+part 'sign_up_state.g.dart';
 
 enum SignUpProvider { none, twitter }
 
@@ -7,6 +10,7 @@ enum SignUpStatus { selectingProvider, authenticatingAtProvider, retrievingProfi
 enum SignUpPropertyKeys { displayName, emailAddress }
 
 @immutable
+@JsonSerializable()
 class SignUpState {
   final SignUpProvider provider;
   final SignUpStatus status;
@@ -68,4 +72,9 @@ class SignUpState {
         isDisplayNameValid: isDisplayNameValid ?? this.isDisplayNameValid,
         isEmailAddressValid: isEmailAddressValid ?? this.isEmailAddressValid);
   }
+
+
+  factory SignUpState.fromJson(Map<String, dynamic> json) => _$SignUpStateFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SignUpStateToJson(this);
 }
