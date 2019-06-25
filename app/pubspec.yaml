@@ -13,9 +13,12 @@ dependencies:
   cupertino_icons: ^0.1.2
   font_awesome_flutter: ^8.4.0
 
-  rxdart: ^0.21.0
   flutter_redux: ^0.5.3
   redux_thunk: ^0.2.1
+  redux_persist: ^0.8.2
+  redux_persist_flutter: ^0.8.1
+
+  rxdart: ^0.21.0
   json_annotation: ^2.0.0
   dio: ^2.1.3
 
