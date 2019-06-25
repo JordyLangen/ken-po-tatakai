@@ -35,6 +35,18 @@ class KenpotatakaiApiClient {
       var responseBody = jsonDecode(response.toString());
       return GetUserResponse.fromJson(responseBody);
     } on DioError catch (exception) {
+      print(exception);
+      return null;
+    }
+  }
+
+  Future<RegisterUserResponse> registerUser(RegisterUserRequest request) async {
+    try {
+      var response = await _dio.post(RegisterUserEndpoint, data: request.toJson());
+      var responseBody = jsonDecode(response.toString());
+      return RegisterUserResponse.fromJson(responseBody);
+    } on DioError catch (exception) {
+      print(exception);
       return null;
     }
   }

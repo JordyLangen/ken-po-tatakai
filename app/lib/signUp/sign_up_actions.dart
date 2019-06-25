@@ -48,3 +48,17 @@ ThunkAction<AppState> getProviderBasedProfileOrUser() {
     }
   };
 }
+
+ThunkAction<AppState> registerUser(String providerId, String displayName, String emailAddress, String avatarUrl) {
+  return (Store<AppState> store) async {
+    var client = KenpotatakaiApiClient(store.state.signUpState.authenticationToken);
+    var registerUserRequest = RegisterUserRequest(
+        providerId: providerId,
+        emailAddress: emailAddress,
+        avatarUrl: avatarUrl,
+        displayName: displayName);
+
+    var registerUserResponse = await client.registerUser(registerUserRequest);
+    print(registerUserResponse);
+  };
+}
