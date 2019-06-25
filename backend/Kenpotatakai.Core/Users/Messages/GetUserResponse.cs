@@ -2,6 +2,7 @@
 {
     public class GetUserResponse
     {
+        public string Id { get; set; }
         public string PlatformId { get; set; }
         public string ProviderId { get; set; }
         public string ProviderName { get; set; }
@@ -23,6 +24,7 @@
         {
             return new GetUserResponse
             {
+                Id = user.Id,
                 ProviderId = user.ProviderId,
                 EmailAddress = user.EmailAddress,
                 AvatarUrl = user.AvatarUrl,

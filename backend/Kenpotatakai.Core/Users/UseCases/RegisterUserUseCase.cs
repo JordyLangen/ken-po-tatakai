@@ -31,11 +31,10 @@ namespace Kenpotatakai.Core.Users.UseCases
             {
                 var result = await _repository.Create(user);
 
-                return new RegisterUserResponse
-                {
-                    UserId = result.Resource.Id,
-                    ResultCode = result.StatusCode
-                };
+                var response = RegisterUserResponse.MapFrom(user);
+                response.UserId = result.Resource.Id;
+                response.ResultCode = result.StatusCode;
+                return response;
             }
             catch (DocumentClientException exception)
             {
