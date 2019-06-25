@@ -12,6 +12,7 @@ import 'package:redux/redux.dart';
 class SignUpViewModel {
   final SignUpProvider selectedProvider;
   final SignUpStatus status;
+  final String providerId;
   final String displayName;
   final String emailAddress;
   final String avatarUrl;
@@ -31,11 +32,13 @@ class SignUpViewModel {
   final Function() getProviderBasedProfile;
   final Function(String) validateEmailAddress;
   final Function(String) validateDisplayName;
+  final Function() register;
 
   SignUpViewModel(
       {this.selectedProvider,
       this.displayName,
       this.status,
+      this.providerId,
       this.emailAddress,
       this.avatarUrl,
       this.signUpAt,
@@ -44,7 +47,8 @@ class SignUpViewModel {
       this.isDisplayNameValid,
       this.isEmailAddressValid,
       this.validateEmailAddress,
-      this.validateDisplayName});
+      this.validateDisplayName,
+      this.register});
 
   factory SignUpViewModel.fromStore(Store<AppState> store) {
     final signUpState = store.state.signUpState;
@@ -52,6 +56,7 @@ class SignUpViewModel {
     return new SignUpViewModel(
         displayName: signUpState.displayName,
         status: signUpState.status,
+        providerId: signUpState.providerId,
         avatarUrl: signUpState.avatarUrl,
         emailAddress: signUpState.emailAddress,
         selectedProvider: signUpState.provider,
@@ -74,6 +79,10 @@ class SignUpViewModel {
         },
         validateEmailAddress: (String emailAddress) {
           store.dispatch(ValidateEmailAddress(Screen.createProfile, SignUpPropertyKeys.emailAddress, emailAddress));
+        },
+        register: () {
+          store.dispatch(registerUser(
+              signUpState.providerId, signUpState.displayName, signUpState.emailAddress, signUpState.avatarUrl));
         });
   }
 }

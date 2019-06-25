@@ -83,8 +83,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     var registerButton = AppButton(
       text: 'Sign up',
       onPressed: () {
-        if (!viewModel.canBeSubmitted) {
-          return null;
+        if (viewModel.canBeSubmitted) {
+          viewModel.register();
         }
       },
     );
