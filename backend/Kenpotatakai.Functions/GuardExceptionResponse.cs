@@ -1,4 +1,4 @@
-﻿namespace Kenpotatakai
+﻿namespace Kenpotatakai.Functions
 {
     public class GuardExceptionResponse
     {

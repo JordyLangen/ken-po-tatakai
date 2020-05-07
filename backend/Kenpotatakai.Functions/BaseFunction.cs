@@ -3,13 +3,13 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Security.Claims;
 using System.Security.Principal;
-using Kenpotatakai.Extensions;
+using Kenpotatakai.Functions.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
 namespace Kenpotatakai.Functions
 {
-    public class BaseFunctionController
+    public class BaseFunction
     {
         private const string ClaimTypeStableSecurityId =
             "stable_sid";
@@ -25,7 +25,7 @@ namespace Kenpotatakai.Functions
 
         protected readonly IMediator Mediator;
 
-        public BaseFunctionController(IMediator mediator)
+        public BaseFunction(IMediator mediator)
         {
             Mediator = mediator;
         }

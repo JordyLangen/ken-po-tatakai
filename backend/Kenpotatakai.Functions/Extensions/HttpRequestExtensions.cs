@@ -7,7 +7,7 @@ using Kenpotatakai.Core.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
-namespace Kenpotatakai.Extensions
+namespace Kenpotatakai.Functions.Extensions
 {
     public static class HttpRequestExtensions
     {
