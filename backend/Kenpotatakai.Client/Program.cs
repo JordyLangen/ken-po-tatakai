@@ -33,7 +33,7 @@ namespace Kenpotatakai.Client
         static void Main(string[] args)
         {
             _token = File.ReadAllText("authenticationtoken.txt");
-            _restClient = new RestClient(LocalFunctionsApiUrl);
+            _restClient = new RestClient(HostedFunctionsApiUrl);
             _restClient.AddDefaultHeader("X-ZUMO-AUTH", _token);
 
             ShowRequestOptions();

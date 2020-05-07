@@ -31,7 +31,7 @@ namespace Kenpotatakai.Core.Users.UseCases
             var authMeRequest = new RestRequest("/.auth/me", Method.GET);
             authMeRequest.AddHeader("X-ZUMO-AUTH", request.AuthenticationToken);
 
-            var response = await _restClient.ExecuteTaskAsync(authMeRequest, cancellationToken);
+            var response = await _restClient.ExecuteAsync(authMeRequest, Method.GET, cancellationToken);
             var authMeResponse = JsonConvert.DeserializeObject<AuthMeResponse[]>(response.Content)
                 .SingleOrDefault();
 

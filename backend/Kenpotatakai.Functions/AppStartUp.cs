@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Kenpotatakai;
 using Kenpotatakai.Core.Infrastructure;
+using Kenpotatakai.Functions;
 using MediatR;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
@@ -10,14 +10,13 @@ using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using RestSharp;
 using User = Kenpotatakai.Core.Users.User;
 
 
 [assembly: WebJobsStartup(typeof(AppStartUp))]
 
-namespace Kenpotatakai
+namespace Kenpotatakai.Functions
 {
     internal class AppStartUp : IWebJobsStartup
     {
