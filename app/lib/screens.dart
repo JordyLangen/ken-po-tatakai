@@ -1,3 +1,1 @@
-enum Screen {
-  createProfile
-}
+enum Screen { createProfile }

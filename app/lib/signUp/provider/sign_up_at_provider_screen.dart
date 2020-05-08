@@ -17,7 +17,6 @@ class SignUpAtProviderScreen extends StatefulWidget {
 }
 
 class _SignUpAtProviderScreenState extends State<SignUpAtProviderScreen> {
-
   final _webviewController = FlutterWebviewPlugin();
   SignUpViewModel _signUpViewModel;
   StreamSubscription<String> _onUrlChanged;
