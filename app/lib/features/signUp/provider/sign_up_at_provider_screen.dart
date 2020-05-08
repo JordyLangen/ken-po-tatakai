@@ -5,9 +5,12 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kenpotatakai/api/kenpotatakai_api_client.dart';
 import 'package:kenpotatakai/app_routes.dart';
+import 'package:kenpotatakai/features/auth/user.dart';
 import 'package:kenpotatakai/redux/app_state.dart';
-import 'package:kenpotatakai/signUp/sign_up_view_model.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:kenpotatakai/widgets/full_screen_loading_indicator.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+import '../sign_up_view_model.dart';
 
 class SignUpAtProviderScreen extends StatefulWidget {
   @override
@@ -17,23 +20,11 @@ class SignUpAtProviderScreen extends StatefulWidget {
 }
 
 class _SignUpAtProviderScreenState extends State<SignUpAtProviderScreen> {
-  final _webviewController = FlutterWebviewPlugin();
   SignUpViewModel _signUpViewModel;
-  StreamSubscription<String> _onUrlChanged;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _onUrlChanged = _webviewController.onUrlChanged.listen((String url) {
-      handlePageLoaded(url);
-    });
-  }
 
   @override
   void dispose() {
     super.dispose();
-    _onUrlChanged.cancel();
   }
 
   @override
@@ -47,13 +38,16 @@ class _SignUpAtProviderScreenState extends State<SignUpAtProviderScreen> {
   Widget _build(BuildContext context, SignUpViewModel viewModel) {
     _signUpViewModel = viewModel;
 
-    return WebviewScaffold(
-      url: viewModel.providerSignUpEndpoint,
-      withZoom: true,
-      withLocalStorage: true,
-      withJavascript: true,
-      hidden: true,
-      initialChild: _buildProviderLogoContainer(viewModel.providerName),
+    if (viewModel.isLoading) {
+      return FullScreenLoadingIndicator();
+    }
+
+    return WebView(
+      initialUrl: viewModel.providerSignUpEndpoint,
+      javascriptMode: JavascriptMode.unrestricted,
+      onPageFinished: (String page) async {
+        await handlePageLoaded(page);
+      },
     );
   }
 
@@ -73,10 +67,14 @@ class _SignUpAtProviderScreenState extends State<SignUpAtProviderScreen> {
     );
   }
 
-  void handlePageLoaded(String url) {
+  Future<void> handlePageLoaded(String url) async {
     if (url.startsWith(KenpotatakaiApiClient.AuthSignUpDoneEndpoint)) {
-      _signUpViewModel.signedUpAt(url);
-      Navigator.popAndPushNamed(context, Routes.SignUpCreateProfile);
+      var userOrProfile = await _signUpViewModel.signedUpAt(url);
+      if (userOrProfile is User) {
+        await Navigator.pushNamedAndRemoveUntil(context, Routes.Profile, (route) => false);
+      } else {
+        await Navigator.popAndPushNamed(context, Routes.SignUpCreateProfile);
+      }
     }
   }
 }

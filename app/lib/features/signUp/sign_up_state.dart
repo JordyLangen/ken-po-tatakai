@@ -15,6 +15,7 @@ class SignUpState {
   final SignUpProvider provider;
   final SignUpStatus status;
   final String authenticationToken;
+  final bool isLoading;
 
   final String displayName;
   final String emailAddress;
@@ -31,6 +32,7 @@ class SignUpState {
     @required this.authenticationToken,
     @required this.emailAddress,
     @required this.avatarUrl,
+    @required this.isLoading,
     @required this.providerId,
     @required this.isDisplayNameValid,
     @required this.isEmailAddressValid,
@@ -68,6 +70,7 @@ class SignUpState {
         displayName: displayName ?? this.displayName,
         providerId: providerId ?? this.providerId,
         avatarUrl: avatarUrl ?? this.avatarUrl,
+        isLoading: isLoading ?? this.isLoading,
         emailAddress: emailAddress ?? this.emailAddress,
         isDisplayNameValid: isDisplayNameValid ?? this.isDisplayNameValid,
         isEmailAddressValid: isEmailAddressValid ?? this.isEmailAddressValid);

@@ -17,6 +17,7 @@ namespace Kenpotatakai.Core.Users.Messages
         {
             return new RegisterUserResponse
             {
+                UserId = user.Id,
                 ProviderId = user.ProviderId,
                 EmailAddress = user.EmailAddress,
                 AvatarUrl = user.AvatarUrl,

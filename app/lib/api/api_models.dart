@@ -21,6 +21,7 @@ class GetProviderBasedProfileResponse {
 
 @JsonSerializable()
 class GetUserResponse {
+  String id;
   String platformId;
   String providerId;
   String providerName;
