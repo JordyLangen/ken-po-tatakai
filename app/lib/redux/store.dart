@@ -9,19 +9,20 @@ import 'package:kenpotatakai/redux/app_reducer.dart';
 
 Future<Store<AppState>> createStore() async {
   var persistor = await _createPersistor();
+  var state = await persistor.load() ?? AppState.initial();
 
   return Store<AppState>(appReducer,
-      initialState: AppState.initial(),
+      initialState: state,
       middleware: [persistor.createMiddleware(), thunkMiddleware, ValidationMiddleware()]);
 }
 
 Future<Persistor<AppState>> _createPersistor() async {
   var persistor = Persistor<AppState>(
       storage: FlutterStorage(),
+      debug: false,
       serializer: JsonSerializer<AppState>((json) {
         return AppState.fromJson(json);
       }));
 
-  await persistor.load();
   return persistor;
 }

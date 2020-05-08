@@ -23,7 +23,6 @@ dependencies:
   dio: ^3.0.9
 
   webview_flutter: ^0.3.21
-  flutter_webview_plugin: ^0.3.11
 
 dev_dependencies:
   flutter_test:

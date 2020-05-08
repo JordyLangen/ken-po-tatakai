@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:kenpotatakai/app_colors.dart';
+import 'package:kenpotatakai/features/profile/profile_screen.dart';
 import 'package:kenpotatakai/redux/app_state.dart';
-import 'package:kenpotatakai/signUp/sign_up_state.dart';
-import 'package:kenpotatakai/signUp/sign_up_view_model.dart';
 import 'package:kenpotatakai/widgets/app_button.dart';
 import 'package:kenpotatakai/widgets/full_screen_loading_indicator.dart';
 import 'package:kenpotatakai/widgets/main_container.dart';
+
+import '../../../app_routes.dart';
+import '../sign_up_state.dart';
+import '../sign_up_view_model.dart';
 
 class CreateProfileScreen extends StatefulWidget {
   @override
@@ -24,7 +27,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     return new StoreConnector<AppState, SignUpViewModel>(
       converter: (store) => SignUpViewModel.fromStore(store),
       builder: (context, viewModel) => _build(context, viewModel),
-      onInitialBuild: (viewModel) => viewModel.getProviderBasedProfile(),
     );
   }
 

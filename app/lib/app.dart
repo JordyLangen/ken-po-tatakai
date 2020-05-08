@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:kenpotatakai/app_colors.dart';
 import 'package:kenpotatakai/app_routes.dart';
+import 'package:kenpotatakai/features/profile/profile_screen.dart';
 import 'package:kenpotatakai/redux/app_state.dart';
-import 'package:kenpotatakai/signUp/profile/create_profile_screen.dart';
-import 'package:kenpotatakai/signUp/provider/sign_up_at_provider_screen.dart';
-import 'package:kenpotatakai/signUp/sign_up_screen.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+
+import 'features/signUp/profile/create_profile_screen.dart';
+import 'features/signUp/provider/sign_up_at_provider_screen.dart';
+import 'features/signUp/sign_up_screen.dart';
 
 class App extends StatefulWidget {
   final Store<AppState> store;
@@ -28,13 +30,13 @@ class _AppState extends State<App> {
                 primaryColor: AppColors.primaryColor,
                 accentColor: AppColors.accentColor,
                 fontFamily: 'Raleway'),
-            home: SignUpScreen(),
-            // TODO: change this to the main view as soon as its developed
-            initialRoute: Routes.SignUp,
+            home: widget.store.state.authState.user != null ? ProfileScreen() : SignUpScreen(),
+            initialRoute: widget.store.state.authState.user != null ? Routes.Profile : Routes.SignUp,
             routes: {
               Routes.SignUp: (context) => SignUpScreen(),
               Routes.SignUpAtProvider: (context) => SignUpAtProviderScreen(),
-              Routes.SignUpCreateProfile: (context) => CreateProfileScreen()
+              Routes.SignUpCreateProfile: (context) => CreateProfileScreen(),
+              Routes.Profile: (content) => ProfileScreen()
             }));
   }
 }

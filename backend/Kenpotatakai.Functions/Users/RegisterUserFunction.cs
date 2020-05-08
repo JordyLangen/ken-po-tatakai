@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using ConflictResult = Microsoft.AspNetCore.Mvc.ConflictResult;
 
 namespace Kenpotatakai.Functions.Users
 {
@@ -45,7 +46,7 @@ namespace Kenpotatakai.Functions.Users
 
                 if (response.ResultCode == HttpStatusCode.Conflict)
                 {
-                    return new System.Web.Http.ConflictResult();
+                    return new ConflictResult();
                 }
 
                 return new InternalServerErrorResult();

@@ -1,13 +1,15 @@
+import 'package:kenpotatakai/features/signUp/sign_up_actions.dart';
+import 'package:kenpotatakai/features/signUp/sign_up_state.dart';
 import 'package:kenpotatakai/redux/validation/validation_actions.dart';
 import 'package:kenpotatakai/screens.dart';
-import 'package:kenpotatakai/signUp/sign_up_actions.dart';
-import 'package:kenpotatakai/signUp/sign_up_state.dart';
 import 'package:redux/redux.dart';
 
 final signUpReducer = combineReducers<SignUpState>([
   TypedReducer<SignUpState, SignUpAtProviderAction>(_signUpAt),
   TypedReducer<SignUpState, SignedUpAtProviderAction>(_signedUpAt),
   TypedReducer<SignUpState, ProviderBasedProfileReceivedAction>(_providerBasedProfileReceived),
+  TypedReducer<SignUpState, StartedResolvingProviderBasedProfileOrUserAction>(
+      _startedResolvingProviderBasedProfileOrUser),
   TypedReducer<SignUpState, NonEmptyValidationResultAction>(_displayNameValidated),
   TypedReducer<SignUpState, EmailAddressValidationResultAction>(_emailAddressValidated),
 ]);
@@ -27,7 +29,13 @@ SignUpState _providerBasedProfileReceived(SignUpState state, ProviderBasedProfil
       emailAddress: action.response.emailAddress,
       avatarUrl: action.response.avatarUrl,
       providerId: action.response.providerId,
-      status: SignUpStatus.profileReceived);
+      status: SignUpStatus.profileReceived,
+      isLoading: false);
+}
+
+SignUpState _startedResolvingProviderBasedProfileOrUser(
+    SignUpState state, StartedResolvingProviderBasedProfileOrUserAction action) {
+  return state.copyWith(isLoading: true);
 }
 
 SignUpState _displayNameValidated(SignUpState state, NonEmptyValidationResultAction action) {

@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kenpotatakai/auth/auth_state.dart';
-import 'package:kenpotatakai/signUp/sign_up_state.dart';
+import 'package:kenpotatakai/features/auth/auth_state.dart';
+import 'package:kenpotatakai/features/signUp/sign_up_state.dart';
 import 'package:meta/meta.dart';
 
 part 'app_state.g.dart';
