@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:kenpotatakai/app_colors.dart';
 import 'package:kenpotatakai/app_routes.dart';
 import 'package:kenpotatakai/extensions/string_extensions.dart';
 import 'package:kenpotatakai/redux/app_state.dart';
