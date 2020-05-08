@@ -13,7 +13,8 @@ class GetProviderBasedProfileResponse {
 
   GetProviderBasedProfileResponse();
 
-  factory GetProviderBasedProfileResponse.fromJson(Map<String, dynamic> json) => _$GetProviderBasedProfileResponseFromJson(json);
+  factory GetProviderBasedProfileResponse.fromJson(Map<String, dynamic> json) =>
+      _$GetProviderBasedProfileResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$GetProviderBasedProfileResponseToJson(this);
 }

@@ -73,7 +73,6 @@ class SignUpState {
         isEmailAddressValid: isEmailAddressValid ?? this.isEmailAddressValid);
   }
 
-
   factory SignUpState.fromJson(Map<String, dynamic> json) => _$SignUpStateFromJson(json);
 
   Map<String, dynamic> toJson() => _$SignUpStateToJson(this);

@@ -19,8 +19,7 @@ SignUpState _$SignUpStateFromJson(Map<String, dynamic> json) {
       isEmailAddressValid: json['isEmailAddressValid'] as bool);
 }
 
-Map<String, dynamic> _$SignUpStateToJson(SignUpState instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$SignUpStateToJson(SignUpState instance) => <String, dynamic>{
       'provider': _$SignUpProviderEnumMap[instance.provider],
       'status': _$SignUpStatusEnumMap[instance.status],
       'authenticationToken': instance.authenticationToken,
@@ -39,8 +38,7 @@ T _$enumDecode<T>(Map<T, dynamic> enumValues, dynamic source) {
   }
   return enumValues.entries
       .singleWhere((e) => e.value == source,
-          orElse: () => throw ArgumentError(
-              '`$source` is not one of the supported values: '
+          orElse: () => throw ArgumentError('`$source` is not one of the supported values: '
               '${enumValues.values.join(', ')}'))
       .key;
 }

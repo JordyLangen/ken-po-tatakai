@@ -11,16 +11,14 @@ class KenpotatakaiApiClient {
   static const String AuthSignUpDoneEndpoint = AuthSignUpEndpoint + '/done';
 
   static const String UsersEndpoint = '/api/users';
-  static const String UserProviderBasedProfileEndpoint =
-      UsersEndpoint + '/provider/profile';
+  static const String UserProviderBasedProfileEndpoint = UsersEndpoint + '/provider/profile';
   static const String GetUserEndpoint = UsersEndpoint;
   static const String RegisterUserEndpoint = UsersEndpoint;
 
   Dio _dio;
 
   KenpotatakaiApiClient(String authenticationToken) {
-    _dio = Dio(BaseOptions(
-        baseUrl: ApiUrl, headers: {'X-ZUMO-AUTH': authenticationToken}));
+    _dio = Dio(BaseOptions(baseUrl: ApiUrl, headers: {'X-ZUMO-AUTH': authenticationToken}));
   }
 
   Future<GetProviderBasedProfileResponse> getProviderBasedProfile() async {
