@@ -8,8 +8,11 @@ part of 'token_response.dart';
 
 TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) {
   return TokenResponse(
-      authenticationToken: json['authenticationToken'] as String);
+    authenticationToken: json['authenticationToken'] as String,
+  );
 }
 
 Map<String, dynamic> _$TokenResponseToJson(TokenResponse instance) =>
-    <String, dynamic>{'authenticationToken': instance.authenticationToken};
+    <String, dynamic>{
+      'authenticationToken': instance.authenticationToken,
+    };

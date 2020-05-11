@@ -25,11 +25,12 @@ Map<String, dynamic> _$GetProviderBasedProfileResponseToJson(
       'displayName': instance.displayName,
       'avatarUrl': instance.avatarUrl,
       'providerName': instance.providerName,
-      'emailAddress': instance.emailAddress
+      'emailAddress': instance.emailAddress,
     };
 
 GetUserResponse _$GetUserResponseFromJson(Map<String, dynamic> json) {
   return GetUserResponse()
+    ..id = json['id'] as String
     ..platformId = json['platformId'] as String
     ..providerId = json['providerId'] as String
     ..providerName = json['providerName'] as String
@@ -40,20 +41,22 @@ GetUserResponse _$GetUserResponseFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$GetUserResponseToJson(GetUserResponse instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'platformId': instance.platformId,
       'providerId': instance.providerId,
       'providerName': instance.providerName,
       'emailAddress': instance.emailAddress,
       'displayName': instance.displayName,
-      'avatarUrl': instance.avatarUrl
+      'avatarUrl': instance.avatarUrl,
     };
 
 RegisterUserRequest _$RegisterUserRequestFromJson(Map<String, dynamic> json) {
   return RegisterUserRequest(
-      providerId: json['providerId'] as String,
-      emailAddress: json['emailAddress'] as String,
-      avatarUrl: json['avatarUrl'] as String,
-      displayName: json['displayName'] as String);
+    providerId: json['providerId'] as String,
+    emailAddress: json['emailAddress'] as String,
+    avatarUrl: json['avatarUrl'] as String,
+    displayName: json['displayName'] as String,
+  );
 }
 
 Map<String, dynamic> _$RegisterUserRequestToJson(
@@ -62,7 +65,7 @@ Map<String, dynamic> _$RegisterUserRequestToJson(
       'providerId': instance.providerId,
       'emailAddress': instance.emailAddress,
       'displayName': instance.displayName,
-      'avatarUrl': instance.avatarUrl
+      'avatarUrl': instance.avatarUrl,
     };
 
 RegisterUserResponse _$RegisterUserResponseFromJson(Map<String, dynamic> json) {
@@ -85,5 +88,5 @@ Map<String, dynamic> _$RegisterUserResponseToJson(
       'providerName': instance.providerName,
       'emailAddress': instance.emailAddress,
       'displayName': instance.displayName,
-      'avatarUrl': instance.avatarUrl
+      'avatarUrl': instance.avatarUrl,
     };

@@ -6,8 +6,8 @@ import 'package:kenpotatakai/redux/app_state.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-import 'features/signUp/profile/create_profile_screen.dart';
-import 'features/signUp/provider/sign_up_at_provider_screen.dart';
+import 'features/signUp/create_profile_screen.dart';
+import 'features/signUp/sign_up_at_provider_screen.dart';
 import 'features/signUp/sign_up_screen.dart';
 
 class App extends StatefulWidget {

@@ -10,7 +10,7 @@ import 'package:kenpotatakai/redux/app_state.dart';
 import 'package:kenpotatakai/widgets/full_screen_loading_indicator.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../sign_up_view_model.dart';
+import 'sign_up_view_model.dart';
 
 class SignUpAtProviderScreen extends StatefulWidget {
   @override
